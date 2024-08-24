@@ -1,0 +1,14 @@
+{
+    "name": "pomodoro-electron",
+    "version": "1.0.0",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "author": "Joe Pytlik",
+    "license": "ISC",
+    "description": "Pomodoro app backend made in Electron.",
+    "devDependencies": {
+        "electron": "^32.0.1"
+    }
+}
