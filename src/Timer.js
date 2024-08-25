@@ -3,12 +3,12 @@ const { ipcMain } = require('electron');
 class Timer {
     constructor() {
         this.timer = null;
-        this.time = 5;
+        this.time = 25 * 60;
         this.count = 0;
         this.options = {
-            workTime: 5,
-            shortBreak: 3,
-            longBreak: 5,
+            workTime: 25 * 60,
+            shortBreak: 5 * 60,
+            longBreak: 25 * 60,
         };
     }
 
@@ -56,7 +56,7 @@ class Timer {
             this.count = (this.count + 1) % 8;
             this.setTime();
 
-            ipcMain.emit('update-timer', this.count);
+            ipcMain.emit('update-timer', this.count, this.time);
         }
     }
 

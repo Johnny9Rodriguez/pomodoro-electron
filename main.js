@@ -9,12 +9,19 @@ const createMainWindow = () => {
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
+        frame: false,
+        resizable: false,
     });
 
     mainWin.loadURL('http://localhost:3000');
     // win.loadFile(path.join(__dirname, 'build', 'index.html'));
 
-    mainWin.webContents.openDevTools();
+    // Disable reload with Ctrl + R
+    mainWin.webContents.on('before-input-event', (event, input) => {
+        if (input.control && input.key.toLowerCase() === 'r') {
+            event.preventDefault();
+        }
+    });
 
     return mainWin;
 };
@@ -50,8 +57,8 @@ app.whenReady().then(() => {
         return timer.toggleTimer();
     });
 
-    ipcMain.on('update-timer', (count) => {
-        mainWin.webContents.send('update-timer', count);
+    ipcMain.on('update-timer', (count, time) => {
+        mainWin.webContents.send('update-timer', count, time);
     });
 
     ipcMain.on('update-time', (time) => {
@@ -61,6 +68,12 @@ app.whenReady().then(() => {
     ipcMain.on('play-audio', (clip) => {
         const filePath = path.join(__dirname, 'src/audio', clip);
         audioWin.webContents.send('play-audio', filePath);
+    });
+
+    ipcMain.on('quit-app', () => {
+        if (mainWin) mainWin.close();
+        if (audioWin) audioWin.close();
+        app.quit();
     });
 });
 
