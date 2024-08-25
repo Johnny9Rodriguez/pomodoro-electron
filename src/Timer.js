@@ -71,6 +71,10 @@ class Timer {
     }
 
     reset() {
+        ipcMain.emit('play-audio', 'reset.wav');
+        clearInterval(this.timer);
+        this.timer = null;
+
         this.count = 0;
         this.time = this.options.workTime;
 
