@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const { setupTray } = require('./src/setupTray');
 const timer = require('./src/Timer');
 
 const createMainWindow = () => {
@@ -8,6 +9,7 @@ const createMainWindow = () => {
         height: 400,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
+            devTools: false,
         },
         frame: false,
         resizable: false,
@@ -46,6 +48,7 @@ app.whenReady().then(() => {
     const mainWin = createMainWindow();
     const audioWin = createAudioWindow();
 
+    setupTray();
     // load user prefs
 
     // TODO: move ipc handlers into own file
@@ -75,9 +78,15 @@ app.whenReady().then(() => {
         if (audioWin) audioWin.close();
         app.quit();
     });
-});
 
-// TODO: when closing main window => also close audio window
+    ipcMain.on('minimize-app', () => {
+        if (mainWin) mainWin.hide();
+    });
+
+    ipcMain.on('show-win', () => {
+        if (mainWin) mainWin.show();
+    })
+});
 
 app.on('window-all-closed', () => {
     app.quit();
