@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { setupTray } = require('./src/setupTray');
-const { setupIPCHandlers } = require('./src/setupIpcHandlers')
+const { setupIPCHandlers } = require('./src/setupIpcHandlers');
 
 const createMainWindow = () => {
     const mainWin = new BrowserWindow({
@@ -19,10 +19,15 @@ const createMainWindow = () => {
     // win.loadFile(path.join(__dirname, 'build', 'index.html'));
 
     // Disable reload with Ctrl + R
-    mainWin.webContents.on('before-input-event', (event, input) => {
-        if (input.control && input.key.toLowerCase() === 'r') {
-            event.preventDefault();
-        }
+    // mainWin.webContents.on('before-input-event', (event, input) => {
+    //     if (input.control && input.key.toLowerCase() === 'r') {
+    //         event.preventDefault();
+    //     }
+    // });
+
+    // Enforce fixed dimensions on resize
+    mainWin.on('resize', () => {
+        mainWin.setSize(226, 306);
     });
 
     return mainWin;
