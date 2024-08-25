@@ -5,11 +5,11 @@ const { setupIPCHandlers } = require('./src/setupIpcHandlers')
 
 const createMainWindow = () => {
     const mainWin = new BrowserWindow({
-        width: 900,
-        height: 400,
+        width: 226,
+        height: 306,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
-            devTools: false,
+            // devTools: false,
         },
         frame: false,
         resizable: false,
