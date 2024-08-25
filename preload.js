@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('pomodoro', {
         ipcRenderer.on('update-timer', (_event, count, time) =>
             callback(count, time)
         ),
+    resetTimer: () => ipcRenderer.invoke('reset-timer'),
     onPlaySound: (callback) =>
         ipcRenderer.on('play-audio', (_event, clip) => callback(clip)),
     quitApp: () => ipcRenderer.send('quit-app'),

@@ -19,6 +19,12 @@ function setupIPCHandlers(mainWin, audioWin) {
         mainWin.webContents.send('update-time', time);
     });
 
+    ipcMain.handle('reset-timer', () => {
+        const time = timer.reset();
+        mainWin.webContents.send('update-timer', 0, time);
+        mainWin.webContents.send('update-time', time);
+    })
+
     ipcMain.on('play-audio', (clip) => {
         const filePath = path.join(__dirname, 'audio', clip);
         audioWin.webContents.send('play-audio', filePath);

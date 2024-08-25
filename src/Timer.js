@@ -3,12 +3,12 @@ const { ipcMain } = require('electron');
 class Timer {
     constructor() {
         this.timer = null;
-        this.time = 25 * 60;
+        this.time = 5;
         this.count = 0;
         this.options = {
-            workTime: 25 * 60,
-            shortBreak: 5 * 60,
-            longBreak: 25 * 60,
+            workTime: 5,
+            shortBreak: 3,
+            longBreak: 7,
         };
     }
 
@@ -68,6 +68,13 @@ class Timer {
         } else {
             this.time = this.options.shortBreak;
         }
+    }
+
+    reset() {
+        this.count = 0;
+        this.time = this.options.workTime;
+
+        return this.time;
     }
 }
 
