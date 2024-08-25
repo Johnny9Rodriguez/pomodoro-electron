@@ -20,6 +20,7 @@ function setupIPCHandlers(mainWin, audioWin) {
     });
 
     ipcMain.handle('reset-timer', () => {
+        timer.stopTimer();
         const time = timer.reset();
         mainWin.webContents.send('update-timer', 0, time);
         mainWin.webContents.send('update-time', time);
