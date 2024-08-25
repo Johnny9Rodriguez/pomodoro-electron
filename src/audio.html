@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Player</title>
+</head>
+
+<body>
+    <audio id="audioPlayer"></audio>
+    <script>
+        window.pomodoro.onPlaySound((clip) => {
+            const audio = new Audio(clip);
+            audio.play();
+        })
+    </script>
+</body>
+
+</html>
