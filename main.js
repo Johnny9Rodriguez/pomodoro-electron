@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { setupTray } = require('./src/setupTray');
-const timer = require('./src/Timer');
+const { setupIPCHandlers } = require('./src/setupIpcHandlers')
 
 const createMainWindow = () => {
     const mainWin = new BrowserWindow({
@@ -51,41 +51,7 @@ app.whenReady().then(() => {
     setupTray();
     // load user prefs
 
-    // TODO: move ipc handlers into own file
-    ipcMain.handle('get-time', () => {
-        return timer.getTime();
-    });
-
-    ipcMain.handle('toggle-timer', () => {
-        return timer.toggleTimer();
-    });
-
-    ipcMain.on('update-timer', (count, time) => {
-        mainWin.webContents.send('update-timer', count, time);
-    });
-
-    ipcMain.on('update-time', (time) => {
-        mainWin.webContents.send('update-time', time);
-    });
-
-    ipcMain.on('play-audio', (clip) => {
-        const filePath = path.join(__dirname, 'src/audio', clip);
-        audioWin.webContents.send('play-audio', filePath);
-    });
-
-    ipcMain.on('quit-app', () => {
-        if (mainWin) mainWin.close();
-        if (audioWin) audioWin.close();
-        app.quit();
-    });
-
-    ipcMain.on('minimize-app', () => {
-        if (mainWin) mainWin.hide();
-    });
-
-    ipcMain.on('show-win', () => {
-        if (mainWin) mainWin.show();
-    })
+    setupIPCHandlers(mainWin, audioWin);
 });
 
 app.on('window-all-closed', () => {
