@@ -1,8 +1,7 @@
 const { ipcMain } = require('electron');
-const timer = require('./Timer');
 const path = require('path');
 
-function setupIPCHandlers(mainWin, audioWin) {
+function setupIPCHandlers(mainWin, audioWin, timer) {
     ipcMain.handle('get-time', () => {
         return timer.getTime();
     });

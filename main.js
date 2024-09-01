@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const Timer = require('./src/Timer');
 const { setupTray } = require('./src/setupTray');
 const { setupIPCHandlers } = require('./src/setupIpcHandlers');
 
@@ -12,11 +14,11 @@ const createMainWindow = () => {
             // devTools: false,
         },
         frame: false,
-        resizable: false,
+        // resizable: false,
     });
 
     mainWin.loadURL('http://localhost:3000');
-    // win.loadFile(path.join(__dirname, 'build', 'index.html'));
+    // mainWin.loadFile(path.join(__dirname, 'build', 'index.html'));
 
     // Disable reload with Ctrl + R
     // mainWin.webContents.on('before-input-event', (event, input) => {
@@ -26,9 +28,9 @@ const createMainWindow = () => {
     // });
 
     // Enforce fixed dimensions on resize
-    mainWin.on('resize', () => {
-        mainWin.setSize(226, 306);
-    });
+    // mainWin.on('resize', () => {
+    //     mainWin.setSize(226, 306);
+    // });
 
     return mainWin;
 };
@@ -49,14 +51,22 @@ const createAudioWindow = () => {
     return audioWin;
 };
 
+const loadUserConfig = () => {
+    const filePath = path.join(__dirname, 'src', 'userData', 'userConfig.json');
+    const data = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(data);
+};
+
 app.whenReady().then(() => {
     const mainWin = createMainWindow();
     const audioWin = createAudioWindow();
 
-    setupTray();
-    // load user prefs
+    const userConfig = loadUserConfig();
+    const timer = new Timer(userConfig);
 
-    setupIPCHandlers(mainWin, audioWin);
+    setupTray();
+
+    setupIPCHandlers(mainWin, audioWin, timer);
 });
 
 app.on('window-all-closed', () => {

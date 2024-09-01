@@ -1,14 +1,14 @@
 const { ipcMain } = require('electron');
 
 class Timer {
-    constructor() {
+    constructor(config) {
         this.timer = null;
-        this.time = 5;
+        this.time = config.workTime;
         this.count = 0;
         this.options = {
-            workTime: 5,
-            shortBreak: 3,
-            longBreak: 7,
+            workTime: config.workTime,
+            shortBreak: config.shortBreak,
+            longBreak: config.longBreak,
         };
     }
 
@@ -82,4 +82,4 @@ class Timer {
     }
 }
 
-module.exports = new Timer();
+module.exports = Timer;
