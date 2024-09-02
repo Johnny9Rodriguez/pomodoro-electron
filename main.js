@@ -22,9 +22,9 @@ const createMainWindow = () => {
         icon: path.join(__dirname, 'src/images', 'icon-256.ico'),
     });
 
-    mainWin.loadURL('http://localhost:3000');
-    // const indexPath = path.join(__dirname, 'build', 'index.html');
-    // mainWin.loadFile(indexPath);
+    // mainWin.loadURL('http://localhost:3000');
+    const indexPath = path.join(__dirname, 'build', 'index.html');
+    mainWin.loadFile(indexPath);
 
     // Disable reload with Ctrl + R
     mainWin.webContents.on('before-input-event', (event, input) => {
