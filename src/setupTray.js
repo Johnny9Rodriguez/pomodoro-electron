@@ -1,5 +1,7 @@
-const { Tray, Menu, ipcMain } = require('electron');
-const path = require('path');
+import { Tray, Menu, ipcMain } from 'electron';
+import path from 'path';
+
+const __dirname = import.meta.dirname;
 
 let tray = null;
 
@@ -28,4 +30,4 @@ function setupTray() {
     // });
 }
 
-module.exports = { setupTray };
+export { setupTray };

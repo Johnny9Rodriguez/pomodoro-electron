@@ -1,15 +1,11 @@
-const { ipcMain } = require('electron');
-const fs = require('fs');
-
-const storeConfigFile = async (config) => {
-    fs.writeFileSync('./src/userData/userConfig.json', JSON.stringify(config));
-};
+import { ipcMain } from 'electron';
 
 class Timer {
-    constructor(config) {
+    constructor(config, store) {
         this.timer = null;
         this.time = config.workTime;
         this.count = 0;
+        this.store = store;
         this.options = {
             workTime: config.workTime,
             shortBreak: config.shortBreak,
@@ -34,7 +30,7 @@ class Timer {
         ipcMain.emit('update-timer', this.count, this.time);
 
         try {
-            await storeConfigFile(newConfig);
+            await this.store.set('userConfig', newConfig);
             return true;
         } catch (error) {
             console.error('Error saving config:', error);
@@ -112,4 +108,4 @@ class Timer {
     }
 }
 
-module.exports = Timer;
+export default Timer;

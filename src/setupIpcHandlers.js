@@ -1,5 +1,5 @@
-const { ipcMain } = require('electron');
-const path = require('path');
+import { ipcMain } from 'electron';
+import path from 'path';
 
 function setupIPCHandlers(mainWin, audioWin, timer) {
     ipcMain.handle('get-user-config', () => {
@@ -8,7 +8,7 @@ function setupIPCHandlers(mainWin, audioWin, timer) {
 
     ipcMain.handle('update-user-config', (_event, newConfig) => {
         return timer.updateUserConfig(newConfig);
-    })
+    });
 
     ipcMain.handle('get-time', () => {
         return timer.getTime();
@@ -51,4 +51,4 @@ function setupIPCHandlers(mainWin, audioWin, timer) {
     });
 }
 
-module.exports = { setupIPCHandlers };
+export { setupIPCHandlers };

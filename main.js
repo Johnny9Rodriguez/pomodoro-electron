@@ -1,9 +1,13 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
-const fs = require('fs');
-const Timer = require('./src/Timer');
-const { setupTray } = require('./src/setupTray');
-const { setupIPCHandlers } = require('./src/setupIpcHandlers');
+import { app, BrowserWindow, ipcMain } from 'electron';
+import path from 'path';
+import Store from 'electron-store';
+import Timer from './src/Timer.js';
+import { setupTray } from './src/setupTray.js';
+import { setupIPCHandlers } from './src/setupIpcHandlers.js';
+
+const __dirname = import.meta.dirname;
+
+const store = new Store();
 
 const createMainWindow = () => {
     const mainWin = new BrowserWindow({
@@ -18,7 +22,8 @@ const createMainWindow = () => {
     });
 
     // mainWin.loadURL('http://localhost:3000');
-    mainWin.loadFile(path.join(__dirname, 'build', 'index.html'));
+    const indexPath = path.join(__dirname, 'build', 'index.html');
+    mainWin.loadFile(indexPath);
 
     // Disable reload with Ctrl + R
     mainWin.webContents.on('before-input-event', (event, input) => {
@@ -52,27 +57,13 @@ const createAudioWindow = () => {
 };
 
 const loadUserConfig = () => {
-    const filePath = path.join(__dirname, 'src', 'userData', 'userConfig.json');
+    const defaultConfig = {
+        workTime: 25 * 60,
+        shortBreak: 5 * 60,
+        longBreak: 25 * 60,
+    };
 
-    // Check if file exists.
-    if (!fs.existsSync(filePath)) {
-        const defaultConfig = {
-            workTime: 25 * 60,
-            shortBreak: 5 * 60,
-            longBreak: 25 * 60,
-        };
-
-        fs.writeFileSync(
-            filePath,
-            JSON.stringify(defaultConfig, null, 2),
-            'utf-8'
-        );
-        return defaultConfig;
-    }
-
-    // If file already exists.
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(data);
+    return store.get('userConfig', defaultConfig);
 };
 
 app.whenReady().then(() => {
@@ -80,7 +71,7 @@ app.whenReady().then(() => {
     const audioWin = createAudioWindow();
 
     const userConfig = loadUserConfig();
-    const timer = new Timer(userConfig);
+    const timer = new Timer(userConfig, store);
 
     setupTray();
 
