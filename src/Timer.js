@@ -12,6 +12,10 @@ class Timer {
         };
     }
 
+    getUserConfig() {
+        return this.options;
+    }
+
     getTime() {
         return this.time;
     }

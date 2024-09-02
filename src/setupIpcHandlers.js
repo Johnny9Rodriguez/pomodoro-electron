@@ -2,6 +2,10 @@ const { ipcMain } = require('electron');
 const path = require('path');
 
 function setupIPCHandlers(mainWin, audioWin, timer) {
+    ipcMain.handle('get-user-config', () => {
+        return timer.getUserConfig();
+    });
+
     ipcMain.handle('get-time', () => {
         return timer.getTime();
     });
@@ -22,7 +26,7 @@ function setupIPCHandlers(mainWin, audioWin, timer) {
         const time = timer.reset();
         mainWin.webContents.send('update-timer', 0, time);
         mainWin.webContents.send('update-time', time);
-    })
+    });
 
     ipcMain.on('play-audio', (clip) => {
         const filePath = path.join(__dirname, 'audio', clip);
