@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "main": "main.js",
     "type": "module",
+    "homepage": "./",
     "scripts": {
         "start": "electron-forge start",
         "package": "electron-forge package",

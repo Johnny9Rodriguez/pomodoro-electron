@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron';
+import { ipcMain, app } from 'electron';
 import path from 'path';
 
 const __dirname = import.meta.dirname;
@@ -42,6 +42,7 @@ function setupIPCHandlers(mainWin, audioWin, timer) {
     ipcMain.on('quit-app', () => {
         if (mainWin) mainWin.close();
         if (audioWin) audioWin.close();
+        app.quit();
     });
 
     ipcMain.on('minimize-app', () => {
@@ -49,7 +50,11 @@ function setupIPCHandlers(mainWin, audioWin, timer) {
     });
 
     ipcMain.on('show-win', () => {
-        if (mainWin) mainWin.show();
+        if (mainWin && !mainWin.isDestroyed()) {
+            mainWin.show();
+        } else {
+            console.log('Main window is not available');
+        }
     });
 }
 

@@ -9,8 +9,12 @@ const __dirname = import.meta.dirname;
 
 const store = new Store();
 
+let mainWin;
+let audioWin;
+let isQuitting = false;
+
 const createMainWindow = () => {
-    const mainWin = new BrowserWindow({
+    mainWin = new BrowserWindow({
         width: 226,
         height: 306,
         webPreferences: {
@@ -19,12 +23,12 @@ const createMainWindow = () => {
         },
         frame: false,
         resizable: false,
-        icon: path.join(__dirname, 'src/images', 'icon-256.ico'),
+        icon: path.join(__dirname, 'src/images', 'icon.png'),
     });
 
-    // mainWin.loadURL('http://localhost:3000');
-    const indexPath = path.join(__dirname, 'build', 'index.html');
-    mainWin.loadFile(indexPath);
+    mainWin.loadURL('http://localhost:3000');
+    // const indexPath = path.join(__dirname, 'build-mac', 'index.html');
+    // mainWin.loadFile(indexPath);
 
     // Disable reload with Ctrl + R
     mainWin.webContents.on('before-input-event', (event, input) => {
@@ -38,12 +42,19 @@ const createMainWindow = () => {
         mainWin.setSize(226, 306);
     });
 
+    mainWin.on('close', (e) => {
+        if (!isQuitting) {
+            e.preventDefault();
+            mainWin.hide();
+        }
+    });
+
     return mainWin;
 };
 
 // Hidden window to use HTML5 audio player.
 const createAudioWindow = () => {
-    const audioWin = new BrowserWindow({
+    audioWin = new BrowserWindow({
         width: 300,
         height: 200,
         show: false,
@@ -68,18 +79,21 @@ const loadUserConfig = () => {
 };
 
 app.whenReady().then(() => {
-    const mainWin = createMainWindow();
-    const audioWin = createAudioWindow();
+    mainWin = createMainWindow();
+    audioWin = createAudioWindow();
 
     const userConfig = loadUserConfig();
     const timer = new Timer(userConfig, store);
 
     setupTray();
 
-    setupIPCHandlers(mainWin, audioWin, timer);
+    setupIPCHandlers(mainWin, audioWin, timer, createMainWindow);
 });
 
 app.on('window-all-closed', () => {
-    app.quit();
-    // if (process.platform !== 'darwin') app.quit()
+    if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('before-quit', () => {
+    isQuitting = true;
 });

@@ -6,7 +6,7 @@ const __dirname = import.meta.dirname;
 let tray = null;
 
 function setupTray() {
-    const iconPath = path.join(__dirname, 'images', 'icon-32.ico');
+    const iconPath = path.join(__dirname, 'images', 'tray@2x.png');
     tray = new Tray(iconPath);
     tray.setToolTip('Pomodoro Timer');
 
@@ -24,10 +24,6 @@ function setupTray() {
     tray.on('click', () => {
         ipcMain.emit('show-win');
     });
-
-    // tray.on('right-click', () => {
-    //     tray.popUpContextMenu(contextMenu);
-    // });
 }
 
 export { setupTray };
