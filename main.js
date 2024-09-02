@@ -11,26 +11,26 @@ const createMainWindow = () => {
         height: 306,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
-            // devTools: false,
+            devTools: false,
         },
         frame: false,
-        // resizable: false,
+        resizable: false,
     });
 
-    mainWin.loadURL('http://localhost:3000');
-    // mainWin.loadFile(path.join(__dirname, 'build', 'index.html'));
+    // mainWin.loadURL('http://localhost:3000');
+    mainWin.loadFile(path.join(__dirname, 'build', 'index.html'));
 
     // Disable reload with Ctrl + R
-    // mainWin.webContents.on('before-input-event', (event, input) => {
-    //     if (input.control && input.key.toLowerCase() === 'r') {
-    //         event.preventDefault();
-    //     }
-    // });
+    mainWin.webContents.on('before-input-event', (event, input) => {
+        if (input.control && input.key.toLowerCase() === 'r') {
+            event.preventDefault();
+        }
+    });
 
     // Enforce fixed dimensions on resize
-    // mainWin.on('resize', () => {
-    //     mainWin.setSize(226, 306);
-    // });
+    mainWin.on('resize', () => {
+        mainWin.setSize(226, 306);
+    });
 
     return mainWin;
 };
