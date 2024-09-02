@@ -26,6 +26,9 @@ export default {
                 portable: {
                     artifactName: 'pomodoro.exe',
                 },
+                win: {
+                    icon: 'src/images/icon.png',
+                },
             },
         },
     ],

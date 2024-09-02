@@ -1,6 +1,8 @@
 import { ipcMain } from 'electron';
 import path from 'path';
 
+const __dirname = import.meta.dirname;
+
 function setupIPCHandlers(mainWin, audioWin, timer) {
     ipcMain.handle('get-user-config', () => {
         return timer.getUserConfig();
