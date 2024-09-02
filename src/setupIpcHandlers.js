@@ -6,6 +6,10 @@ function setupIPCHandlers(mainWin, audioWin, timer) {
         return timer.getUserConfig();
     });
 
+    ipcMain.handle('update-user-config', (_event, newConfig) => {
+        return timer.updateUserConfig(newConfig);
+    })
+
     ipcMain.handle('get-time', () => {
         return timer.getTime();
     });

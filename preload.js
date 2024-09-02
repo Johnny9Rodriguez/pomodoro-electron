@@ -2,6 +2,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('pomodoro', {
     getUserConfig: () => ipcRenderer.invoke('get-user-config'),
+    updateUserConfig: (newConfig) =>
+        ipcRenderer.invoke('update-user-config', newConfig),
     toggleTimer: () => ipcRenderer.invoke('toggle-timer'),
     getTime: () => ipcRenderer.invoke('get-time'),
     onUpdateTime: (callback) =>

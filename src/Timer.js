@@ -1,4 +1,9 @@
 const { ipcMain } = require('electron');
+const fs = require('fs');
+
+const storeConfigFile = async (config) => {
+    fs.writeFileSync('./src/userData/userConfig.json', JSON.stringify(config));
+};
 
 class Timer {
     constructor(config) {
@@ -14,6 +19,27 @@ class Timer {
 
     getUserConfig() {
         return this.options;
+    }
+
+    async updateUserConfig(newConfig) {
+        this.options = newConfig;
+
+        // Reset timer.
+        clearInterval(this.timer);
+        this.timer = null;
+        this.count = 0;
+        this.time = this.options.workTime;
+
+        // Update view.
+        ipcMain.emit('update-timer', this.count, this.time);
+
+        try {
+            await storeConfigFile(newConfig);
+            return true;
+        } catch (error) {
+            console.error('Error saving config:', error);
+            return false;
+        }
     }
 
     getTime() {
