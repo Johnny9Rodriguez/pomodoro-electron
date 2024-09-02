@@ -53,6 +53,24 @@ const createAudioWindow = () => {
 
 const loadUserConfig = () => {
     const filePath = path.join(__dirname, 'src', 'userData', 'userConfig.json');
+
+    // Check if file exists.
+    if (!fs.existsSync(filePath)) {
+        const defaultConfig = {
+            workTime: 25 * 60,
+            shortBreak: 5 * 60,
+            longBreak: 25 * 60,
+        };
+
+        fs.writeFileSync(
+            filePath,
+            JSON.stringify(defaultConfig, null, 2),
+            'utf-8'
+        );
+        return defaultConfig;
+    }
+
+    // If file already exists.
     const data = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(data);
 };
