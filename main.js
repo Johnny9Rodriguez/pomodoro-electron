@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import Store from 'electron-store';
 import Timer from './src/Timer.js';
@@ -26,9 +26,9 @@ const createMainWindow = () => {
         icon: path.join(__dirname, 'src/images', 'icon.png'),
     });
 
-    mainWin.loadURL('http://localhost:3000');
-    // const indexPath = path.join(__dirname, 'build-mac', 'index.html');
-    // mainWin.loadFile(indexPath);
+    // mainWin.loadURL('http://localhost:3000');
+    const indexPath = path.join(__dirname, 'build-mac', 'index.html');
+    mainWin.loadFile(indexPath);
 
     // Disable reload with Ctrl + R
     mainWin.webContents.on('before-input-event', (event, input) => {

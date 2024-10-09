@@ -10,10 +10,15 @@ export default {
         {
             name: '@electron-forge/maker-zip',
             platforms: ['darwin'],
+            config: {
+                icon: './public/images/icon.icns',
+            },
         },
         {
             name: '@electron-forge/maker-deb',
-            config: {},
+            config: {
+                icon: './public/images/icon.icns',
+            },
         },
         {
             name: '@electron-forge/maker-rpm',
